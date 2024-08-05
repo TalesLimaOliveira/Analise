@@ -30,11 +30,12 @@ function benchmark_search()
     vector_list = [generate_vectors(n, upper_limit) for n in n_values]
     key_list = [generate_keys(q, upper_limit) for q in q_values]
 
-    time_simple_search = Matrix{Float64}(undef, length(n_values), length(q_values))
-    time_simple_search = Matrix{Float64}(undef, length(n_values), length(q_values))
-    time_to_sort = Matrix{Float64}(undef, length(n_values), length(q_values))
-    time_optimized_search = Matrix{Float64}(undef, length(n_values), length(q_values))
-    time_binary_search = Matrix{Float64}(undef, length(n_values), length(q_values))
+
+    # TODO: CHECK THE LOGIC BEHIND THIS...
+    time_simple_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
+    time_to_sort = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
+    time_optimized_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
+    time_binary_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
 
 
     # Creating 4 vectors:
