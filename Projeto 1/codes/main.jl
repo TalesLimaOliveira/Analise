@@ -36,19 +36,6 @@ function benchmark_search()
     time_binary_search = Matrix{Float64}(undef, length(n_values), length(q_values))
     time_to_sort = Vector{Float64}(undef, length(n_values))
 
-
-    # Creating 4 vectors:
-    #   v[10^4] v[10^5] v[10^6] v[10^7]
-    for n in 4:7 
-        vector_list[n-3] = generate_vectors(10^n, upper_limit)
-    end
-
-    # Creating 4 key_lists:
-    #   k[10^2] k[10^3] k[10^4] k[10^5]
-    for q in 2:5
-        key_list[q-1] = generate_keys(10^q, upper_limit)
-    end
-
 ##############################################################################
 
     # Simple linear search - Benchmarking
