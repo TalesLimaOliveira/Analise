@@ -26,16 +26,15 @@ function benchmark_search()
     n_values = [10^4, 10^5, 10^6, 10^7]  # Vectors Sizes
     q_values = [10^2, 10^3, 10^4, 10^5]  # Amount of Keys
 
-    # Inicializar vetores e chaves
+    # Initialize the list of vectors and keys
     vector_list = [generate_vectors(n, upper_limit) for n in n_values]
     key_list = [generate_keys(q, upper_limit) for q in q_values]
 
-
-    # TODO: CHECK THE LOGIC BEHIND THIS...
-    time_simple_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
-    time_optimized_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
-    time_binary_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
-    time_to_sort = [Vector{Float64}(undef, length(n_values))]
+    # Initialize the list of timers
+    time_simple_search = Matrix{Float64}(undef, length(n_values), length(q_values))
+    time_optimized_search = Matrix{Float64}(undef, length(n_values), length(q_values))
+    time_binary_search = Matrix{Float64}(undef, length(n_values), length(q_values))
+    time_to_sort = Vector{Float64}(undef, length(n_values))
 
 
     # Creating 4 vectors:
