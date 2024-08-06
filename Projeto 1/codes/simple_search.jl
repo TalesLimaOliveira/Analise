@@ -1,6 +1,6 @@
 # Simple linear search function
 function simple_search(vector, key)
-    for i in 1:lengh(vector)
+    for i in 1:eachind(vector)
         if vector[i] == key
             return i  # Returns the index where the key was found
         end
