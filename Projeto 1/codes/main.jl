@@ -21,7 +21,7 @@ end
 # Benchmarking the functions
 function benchmark_search()
 
-     # VARS
+    # VARS
     upper_limit = 1000 # Upper limit for generating random numbers
     n_values = [10^4, 10^5, 10^6, 10^7]  # Vectors Sizes
     q_values = [10^2, 10^3, 10^4, 10^5]  # Amount of Keys
@@ -32,10 +32,10 @@ function benchmark_search()
 
 
     # TODO: CHECK THE LOGIC BEHIND THIS...
-    time_simple_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
-    time_to_sort = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
-    time_optimized_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
-    time_binary_search = [Matrix{Float64}(undef, length(n_values), q) for q in q_values]
+    time_simple_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
+    time_optimized_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
+    time_binary_search = [Matrix{Float64}(undef, length(n_values), length(q_values))]
+    time_to_sort = [Vector{Float64}(undef, length(n_values))]
 
 
     # Creating 4 vectors:
@@ -59,8 +59,6 @@ function benchmark_search()
                 for key in key_list[j]
                     sequential_search(vector_list[i], key)
                 end
-            end
-            # Armazenar o tempo médio em segundos
             time_simple_search[i, j] = minimum(times).time / 1e9
         end
     end
@@ -69,7 +67,7 @@ function benchmark_search()
     # Sorting the vectors - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         times = @benchmark sort(vector_list[i]) # Do the benchmark sort
-        time_to_sort[i, 1] = minimum(times).time / 1e9  # Using Row 1, just one value of Q
+        time_to_sort[i] = minimum(times).time / 1e9
         vector_list[i] = sort(vector_list[i])  # Sort the vectors
     end
     
@@ -81,7 +79,6 @@ function benchmark_search()
                 for key in key_list[j]
                     optimized_search(vector_list[i], key)
                 end
-            end
             time_optimized_search[i, j] = minimum(times).time / 1e9
         end
     end
@@ -94,16 +91,15 @@ function benchmark_search()
                 for key in key_list[j]
                     binary_search(vector_list[i], key)
                 end
-            end
             time_binary_search[i, j] = minimum(times).time / 1e9
         end
     end
 
-    return time_simple_search, time_to_sort, time_optimized_search, time_binary_search
+    return time_simple_search, time_optimized_search, time_binary_search, time_to_sort
 end
 
 # Run the benchmark
-time_simple_search, time_to_sort, time_optimized_search, time_binary_search = benchmark_search()
+simple, optimized, binary, sort = benchmark_search()
 
-check_time()
-generate_graphics()
+check_time(simple, optimized, binary, sort)
+generate_graphics(simple, optimized, binary, sort)

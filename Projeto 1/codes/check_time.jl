@@ -2,7 +2,7 @@ using Plots
 using Statistics
 
 # Function to verify time results
-function check_time()
+function check_time(time_simple_search, time_optimized_search, time_binary_search, time_to_sort)
     println("Tempos de Pesquisa Simples: ", time_simple_search)
     println("Tempo para Ordenar: ", time_to_sort)
     println("Tempos de Pesquisa Otimizada: ", time_optimized_search)
@@ -10,7 +10,7 @@ function check_time()
 end
 
 # Ploting graphics
-function generate_graphics()
+function generate_graphics(time_simple_search, time_optimized_search, time_binary_search, time_to_sort)
     n_values = [10^4, 10^5, 10^6, 10^7]
     q_values = [10^2, 10^3, 10^4, 10^5]
 
