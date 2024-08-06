@@ -1,20 +1,7 @@
 include("simple_serch.jl")
 include("optimized_serch.jl")
 include("binary_serch.jl")
-include("check_time.jl")
-
-using Plots
-using Statistics
-
-# Function to generate a vector of random values
-function generate_vectors(size::Int, upper_limit::Int)
-    return rand(1:upper_limit, size)
-end
-
-# Function to generate a random key
-function generate_keys(size::Int, upper_limit::Int)
-    return rand(1:upper_limit, size)
-end
+include("utils.jl")
 
 
 # Benchmarking the functions
@@ -40,14 +27,10 @@ function benchmark_search()
     # Simple linear search - Benchmarking
     for i in 1:length(n_values)  # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            initial_time = time_ns()
-            for key in key_list[j]
-                simple_search(vector_list[i], key)
-            end
-            final_time = time_ns()
-            time_simple_search[i, j] = (final_time - initial_time) / 1e9
+            time_simple_search[i, j] = dummy_search(simple_search, vector_list[i], key_list[j])
         end
     end
+
 
 
     # Sorting the vectors - Benchmarking
@@ -59,15 +42,11 @@ function benchmark_search()
     end
     
 
+
     # Optimized Linear search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            initial_time = time_ns()
-            for key in key_list[j]
-                optimized_search(vector_list[i], key)
-            end
-            final_time = time_ns()
-            time_simple_search[i, j] = (final_time - initial_time) / 1e9
+            time_optimized_search[i, j] = dummy_search(optimized_serch, vector_list[i], key_list[j])
             end
         end
     end
@@ -76,12 +55,7 @@ function benchmark_search()
     # Binary search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            initial_time = time_ns()
-            for key in key_list[j]
-                binary_search(vector_list[i], key)
-            end
-            final_time = time_ns()
-            time_simple_search[i, j] = (final_time - initial_time) / 1e9
+            time_binary_search[i, j] = dummy_search(binary_serch, vector_list[i], key_list[j])
         end
     end
 
@@ -91,5 +65,7 @@ end
 # Run the benchmark
 simple, optimized, binary, sort = benchmark_search()
 
-check_time(simple, optimized, binary, sort)
+#Genarate Plots
 generate_graphics(simple, optimized, binary, sort)
+
+# check_time(simple, optimized, binary, sort)
