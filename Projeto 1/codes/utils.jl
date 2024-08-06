@@ -1,24 +1,4 @@
 using Plots
-using Statistics
-using Random
-
-# Function to generate a vector of random values
-function generate_vectors(size::Int, upper_limit::Int)
-    return rand(1:upper_limit, size)
-end
-
-# Function to generate a random key
-function generate_keys(size::Int, upper_limit::Int)
-    return rand(1:upper_limit, size)
-end
-
-# Function to verify time results
-function check_time(time_simple_search, time_optimized_search, time_binary_search, time_to_sort)
-    println("Tempos de Pesquisa Simples: ", time_simple_search)
-    println("Tempo para Ordenar: ", time_to_sort)
-    println("Tempos de Pesquisa Otimizada: ", time_optimized_search)
-    println("Tempos de Pesquisa Binária: ", time_binary_search)
-end
 
 # Ploting graphics
 function generate_graphics(time_simple_search, time_optimized_search, time_binary_search, time_to_sort)
