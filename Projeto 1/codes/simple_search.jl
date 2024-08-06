@@ -8,3 +8,4 @@ function simple_search(vector, key)
     end
     return -1  # Returns -1 if the key is not found
 end
+a

@@ -3,7 +3,6 @@ include("optimized_serch.jl")
 include("binary_serch.jl")
 include("check_time.jl")
 
-using BenchmarkTools
 using Plots
 using Statistics
 
@@ -36,36 +35,40 @@ function benchmark_search()
     time_binary_search = Matrix{Float64}(undef, length(n_values), length(q_values))
     time_to_sort = Vector{Float64}(undef, length(n_values))
 
-##############################################################################
+    ##############################################################################
 
     # Simple linear search - Benchmarking
     for i in 1:length(n_values)  # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            times = @benchmark begin
-                for key in key_list[j]
-                    sequential_search(vector_list[i], key)
-                end
-            time_simple_search[i, j] = minimum(times).time / 1e9
+            initial_time = time_ns()
+            for key in key_list[j]
+                simple_search(vector_list[i], key)
+            end
+            final_time = time_ns()
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
         end
     end
 
 
     # Sorting the vectors - Benchmarking
     for i in 1:length(n_values)   # For each vector size
-        times = @benchmark sort(vector_list[i]) # Do the benchmark sort
-        time_to_sort[i] = minimum(times).time / 1e9
+        initial_time = time_ns()
         vector_list[i] = sort(vector_list[i])  # Sort the vectors
+        final_time = time_ns()
+        time_to_sort[i] = (final_time - initial_time) / 1e9
     end
     
 
     # Optimized Linear search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            times = @benchmark begin
-                for key in key_list[j]
-                    optimized_search(vector_list[i], key)
-                end
-            time_optimized_search[i, j] = minimum(times).time / 1e9
+            initial_time = time_ns()
+            for key in key_list[j]
+                optimized_search(vector_list[i], key)
+            end
+            final_time = time_ns()
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
+            end
         end
     end
 
@@ -73,11 +76,12 @@ function benchmark_search()
     # Binary search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            times = @benchmark begin
-                for key in key_list[j]
-                    binary_search(vector_list[i], key)
-                end
-            time_binary_search[i, j] = minimum(times).time / 1e9
+            initial_time = time_ns()
+            for key in key_list[j]
+                binary_search(vector_list[i], key)
+            end
+            final_time = time_ns()
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
         end
     end
 
