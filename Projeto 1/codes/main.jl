@@ -1,8 +1,9 @@
-include("simple_serch.jl")
-include("optimized_serch.jl")
-include("binary_serch.jl")
+include("simple_search.jl")
+include("optimized_search.jl")
+include("binary_search.jl")
 include("utils.jl")
 
+using Dates
 
 # Benchmarking the functions
 function benchmark_search()
@@ -27,27 +28,34 @@ function benchmark_search()
     # Simple linear search - Benchmarking
     for i in 1:length(n_values)  # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            time_simple_search[i, j] = dummy_search(simple_search, vector_list[i], key_list[j])
+            initial_time = nanosecond(t::Time)
+            for key in key_list[j]
+                simple_search(vector_list[i], key)
+            end
+            final_time = nanosecond(t::Time)
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
         end
     end
 
 
-
     # Sorting the vectors - Benchmarking
     for i in 1:length(n_values)   # For each vector size
-        initial_time = time_ns()
+        initial_time = nanosecond(t::Time)
         vector_list[i] = sort(vector_list[i])  # Sort the vectors
-        final_time = time_ns()
+        final_time = nanosecond(t::Time)
         time_to_sort[i] = (final_time - initial_time) / 1e9
     end
     
 
-
     # Optimized Linear search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            time_optimized_search[i, j] = dummy_search(optimized_serch, vector_list[i], key_list[j])
+            initial_time = nanosecond(t::Time)
+            for key in key_list[j]
+                optimized_search(vector_list[i], key)
             end
+            final_time = nanosecond(t::Time)
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
         end
     end
 
@@ -55,7 +63,12 @@ function benchmark_search()
     # Binary search - Benchmarking
     for i in 1:length(n_values)   # For each vector size
         for j in 1:length(q_values)  # For each key numbers
-            time_binary_search[i, j] = dummy_search(binary_serch, vector_list[i], key_list[j])
+            initial_time = nanosecond(t::Time)
+            for key in key_list[j]
+                binary_search(vector_list[i], key)
+            end
+            final_time = nanosecond(t::Time)
+            time_simple_search[i, j] = (final_time - initial_time) / 1e9
         end
     end
 
@@ -65,7 +78,5 @@ end
 # Run the benchmark
 simple, optimized, binary, sort = benchmark_search()
 
-#Genarate Plots
+check_time(simple, optimized, binary, sort)
 generate_graphics(simple, optimized, binary, sort)
-
-# check_time(simple, optimized, binary, sort)
