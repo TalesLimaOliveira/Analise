@@ -14,21 +14,37 @@ function generate_graphics(time_simple_search, time_optimized_search, time_binar
     n_values = [10^4, 10^5, 10^6, 10^7]
     q_values = [10^2, 10^3, 10^4, 10^5]
 
-    for j in 1:4
+    for j in 1:length(q_values)
         p = plot(
             n_values,
             time_simple_search[:, j],
             label = "Pesquisa Linear Simples",
             xlabel = "Tamanho do Vetor (n)",
             ylabel = "Tempo (s)",
-            title = "q = $q_values[j]",
-            legend = :topleft
+            title = "q = $(q_values[j])",
+            legend = :topleft,
+            lw = 2  # Line Width
         )
-        plot!(n_values, time_to_sort[:, j], label = "Tempo para Ordenar")
-        plot!(n_values, time_optimized_search[:, j], label = "Pesquisa Linear Otimizada")
-        plot!(n_values, time_binary_search[:, j], label = "Pesquisa Binária")
-        
+        plot!(
+            n_values,
+            time_to_sort,
+            label = "Tempo para Ordenar",
+            lw = 2 # Line Width
+        )
+        plot!(
+            n_values,
+            time_optimized_search[:, j],
+            label = "Pesquisa Linear Otimizada",
+            lw = 2 # Line Width
+        )
+        plot!(
+            n_values,
+            time_binary_search[:, j],
+            label = "Pesquisa Binária",
+            lw = 2 # Line Width
+        )
+
         display(p)
-        #savefig(p, "benchmark_q_$q_values[j].png")
+        # savefig(p, "benchmark_q_$(q_values[j]).png")
     end
 end
