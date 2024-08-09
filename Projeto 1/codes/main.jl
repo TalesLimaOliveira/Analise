@@ -1,35 +1,75 @@
 include("simple_search.jl")
 include("optimized_search.jl")
 include("binary_search.jl")
-include("utils.jl")
+include("plots.jl")
 
 
-# VARS
-n_values = [10^i for i in 4:7]  # Vectors Sizes
-q_values = [10^i for i in 2:5]  # Amount of Keys
+# Const
+benchmark_count = 1
+img_output = "Bench"
+
+# List Sizes
+n_values = [10^i for i in 4:7] # Vectors Sizes
+q_values = [10^i for i in 2:5] # Amount of Keys
+
+Random.seed!(1234)
 
 # Initialize the list of vectors and keys
-vector_list = [rand(1:10^5, n) for n in n_values]
-key_list = [collect(1:1:q) for q in q_values] # K2[1-100], ... , K5[1-10^5]
+key_list = [rand(1:10^3, q) for q in q_values]
+vec_list = [rand(1:10^3, n) for n in n_values]
+
 
 # Initialize the list of timers
-time_simple = zeros(length(n_values), length(q_values))
-time_optimized = zeros(length(n_values), length(q_values))
-time_binary = zeros(length(n_values), length(q_values))
-time_sort = zeros(length(n_values))
+simple_times = zeros(length(n_values), length(q_values))
+optimized_times = zeros(length(n_values), length(q_values))
+binary_times = zeros(length(n_values), length(q_values))
+sorting_times = zeros(length(n_values))
 
 
-
-time_simple = simple_benchmark(vector_list, key_list)
-
-# Sorting the vectors - Benchmarking
-for i in 1:length(vector_list)   # For each vector size
-    bench_sort = @benchmark sort($vector_list[$i])
-    time_sort[i] = median(bench_sort).time / 1e9
-    vector_list[i] = sort(vector_list[i])
+# Dummy search function
+function dummy_search(search_func, vector, keys)
+    [search_func(vector, k) for k in keys]
 end
 
-time_optimizedh = optimized_benchmark(vector_list, key_list)
-time_binary = binary_benchmark(vector_list, key_list)
+# Benchmark macro
+function my_benchmark(search_func, time_matrix)
+    for i in 1:length(vec_list) # For each vector size
+        for j in 1:length(key_list)  # For each key numbers
+            median_time = zeros(benchmark_count)
+            for c in 1:benchmark_count
+                start = time_ns()
+                [search_func(vec_list[i], k) for k in key_list[j]]
+                final = time_ns()
+                median_time[c] = (final - start) / 1e9
+            end
+            time_matrix[i, j] = median(median_time)
+        end
+    end
+end
 
-generate_graphics(time_simple, time_optimized, time_binary, time_sort)
+
+# Measure linear search
+my_benchmark(simple_search, simple_times)
+
+# Measure sorting
+for i in 1:length(vec_list)
+    median_time = zeros(benchmark_count)
+    for c in 1:benchmark_count
+        start = time_ns()
+        sort(vec_list[i], alg=QuickSort)
+        final = time_ns()
+        median_time[c] = (final - start) / 1e9
+    end
+    sorting_times[i] = median(median_time)
+end
+
+[sort!(sublist) for sublist in vec_list]
+vec_list
+
+# Measure optimized search
+my_benchmark(optimized_search, optimized_times)
+
+# Measure binary search
+my_benchmark(binary_search, binary_times)
+
+generate_graphics(simple_times, optimized_times, binary_times, sorting_times)
