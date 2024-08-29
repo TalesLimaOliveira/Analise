@@ -2,25 +2,31 @@ using Plots
 
 function generate_plot(bubblesort_time, heapsort_time, array_size)
     p = plot(
-        bubblesort_time, array_size, 
-        label = "BubbleSort", 
-        xlabel = "Time (seconds)", 
-        ylabel = "Array Size", 
-        lw = 2, 
-        #xscale = :log10, 
-        #yscale = :log10,
-        legend=:topleft,
         title = "BubbleSort vs HeapSort",
-        linecolor = :blue
+        xlabel = "Array Size", 
+        ylabel = "Time (seconds)", 
+        xscale = :log10, 
+        yscale = :log10,
+        legend=:topleft,
     )
+
+    plot!(
+        p,
+        array_size, bubblesort_time,
+        label = "BubbleSort",
+        lw = 2,
+        linecolor = :blue  # Distinguindo as cores
+    )
+
     
     plot!(
-        heapsort_time, array_size,
+        p,
+        array_size, heapsort_time,
         label = "HeapSort", 
         lw = 2,
         linecolor = :red  # Distinguindo as cores
     )
 
     display(p)
-    #savefig(p, ".")
+    savefig(p, "Projeto 2/imgs/plot2.png")
 end

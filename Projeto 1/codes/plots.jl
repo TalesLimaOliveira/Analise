@@ -15,8 +15,7 @@ function generate_graphics(simple_times, optimized_times, binary_times, sorting_
     
         plot!(
             p,
-            n_values,
-            simple_times[:, i],
+            n_values, simple_times[:, i],
             label="Busca Simples",
             color=:red,
             lw= 2,
@@ -25,8 +24,7 @@ function generate_graphics(simple_times, optimized_times, binary_times, sorting_
         total_optimized_times = sorting_times .+ optimized_times[:, i]
         plot!(
             p,
-            n_values,
-            total_optimized_times,
+            n_values, total_optimized_times,
             label="Busca Otimizada + Ordenação",
             color=:blue,
             lw= 2
@@ -35,8 +33,7 @@ function generate_graphics(simple_times, optimized_times, binary_times, sorting_
         total_binary_times = sorting_times .+ binary_times[:, i]
         plot!(
             p,
-            n_values,
-            total_binary_times,
+            n_values, total_binary_times,
             label="Busca Binária + Ordenação",
             color=:green,
             lw= 2
