@@ -10,7 +10,7 @@ bubblesort_time = zeros(length(array_size))
 heapsort_time = zeros(length(array_size))
 
 # Executando os benchmarks
-benchmark_count = 10
+benchmark_count = 1
 
 print("Bubble: ")
 start = time_ns()
