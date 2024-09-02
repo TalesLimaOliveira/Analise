@@ -1,8 +1,8 @@
 using Plots
 
-function generate_plot(bubblesort_time, heapsort_time, array_size)
+function generate_plot(insertionsort_time, heapsort_time, array_size)
     p = plot(
-        title = "BubbleSort vs HeapSort",
+        title = "InsertionSort vs HeapSort",
         xlabel = "Array Size", 
         ylabel = "Time (seconds)", 
         xscale = :log10, 
@@ -12,8 +12,8 @@ function generate_plot(bubblesort_time, heapsort_time, array_size)
 
     plot!(
         p,
-        array_size, bubblesort_time,
-        label = "BubbleSort",
+        array_size, insertionsort_time,
+        label = "InsertionSort",
         lw = 2,
         linecolor = :blue  # Distinguindo as cores
     )
